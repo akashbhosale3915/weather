@@ -1,24 +1,66 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import axios from 'axios';
 import './App.css';
 
+let apikey = 'f8520a623608c0dd76cddb2116c822cb'
+const current = new Date();
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+const day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+const date = `${day[current.getDay()]} ${current.getDate()}th ${monthNames[current.getMonth()]} ${current.getFullYear()}`;
+
+
 function App() {
+
+  const [city, setcity] = useState('')
+  const [weather, setweather] = useState({})
+
+  const handlecity = e => {
+    setcity(e.target.value);
+  }
+
+  const handleweather = (e) => {
+    e.preventDefault()
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${apikey}`
+
+    axios.get(url)
+      .then((response) => {
+        setweather(response.data)
+        setcity('')
+        console.log(weather)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className='maindiv'>
+      <div className='overlay'>
+        <div className='seconddiv'>
+          <form onSubmit={handleweather}>
+            <input type='text' placeholder='Search...' value={city} onChange={handlecity} required />
+            <input type='submit' value='Search' />
+          </form>
+        </div>
+
+        {
+          (typeof weather.main != 'undefined') ? (
+            <div>
+              <div className='dynamic'>
+                <div className='city'><h1>{weather.name}</h1></div>
+                <div className='date'><h3>{date}</h3></div>
+                <div className='degree'><h1>{Math.round(weather.main.temp)}&deg;C</h1></div>
+              </div>
+            </div>
+          ) : (<div className='nodata'><h1>No data</h1></div>)
+        }
+      </div>
+    </div >
   );
 }
 

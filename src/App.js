@@ -57,7 +57,7 @@ function App() {
                 <div className='degree'><h1>{Math.round(weather.main.temp)}&deg;C</h1></div>
               </div>
             </div>
-          ) : (<div className='nodata'><h1>No data</h1></div>)
+          ) : (<div className='nodata'><h1>Enter a Location</h1></div>)
         }
       </div>
     </div >

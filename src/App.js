@@ -17,6 +17,8 @@ function App() {
 
   const [city, setcity] = useState('')
   const [weather, setweather] = useState({})
+  
+  const icon = `http://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
 
   const handlecity = e => {
     setcity(e.target.value);
@@ -55,6 +57,10 @@ function App() {
                 <div className='city'><h1>{weather.name}</h1></div>
                 <div className='date'><h3>{date}</h3></div>
                 <div className='degree'><h1>{Math.round(weather.main.temp)}&deg;C</h1></div>
+                   <div className="desc">
+                <img src={icon} alt="img" />
+                <p>{weather.weather[0].description}</p>
+              </div>
               </div>
             </div>
           ) : (<div className='nodata'><h1>Enter a Location</h1></div>)
